@@ -1,25 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {sendMessageTC} from "./main/bll/reducer";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const messages = useSelector(state => state.test.messages)
+    const dispatch = useDispatch()
+
+    const [message, setMessage] = useState('Hello')
+
+    return (
+        <div className="App">
+            <div>
+                {
+                    messages.map((m, index) => {
+                        return <div key={index}>
+                            {m}
+                            <hr/>
+                        </div>
+                    })
+                }
+            </div>
+            <textarea value={message} onChange={
+                (e) => setMessage(e.currentTarget.value)
+            }/>
+            <div>
+                <button onClick={() => {
+                    dispatch(sendMessageTC(message))
+                    setMessage('')
+                }}>send
+                </button>
+            </div>
+        </div>
+    );
 }
 
 export default App;
